@@ -4,11 +4,40 @@ var x;
     x.ready(iniciar);
  /*Funcion para reetir el efecto de texto*/
     function iniciar(){
+		/*Variables para los selectores*/
         var x=$("h1");
+		var y=$(".panel-score,span");
+		/*var z=$(".panel-tablero");*/
+		var q=$(".panel-score > div");
+
+		
+		/*Efectos de texto al cargar la pagina */
         x.animate({color: "red"}, 1000);
-        //volver a llamar a iniciar() luego de terminar la última animación
-        x.animate({color: "yellow"},iniciar);
+		x.animate({marginLeft: "50%"}, 1000);
+		x.animate({marginLeft: "0%"}, 1000);
+		x.animate({color: "yellow"},iniciar);
+
+		y.animate({color: "white"}, 1000);
+		y.animate({color: "gray"}, iniciar);
+
+		/*Efectos para los bordes de los contenedores 
+		z.animate({borderColor: "red"}, 1000);
+		z.animate({borderColor: "yellow" }, iniciar);*/
+
+		q.animate({borderColor: "red"}, 1000);
+		q.animate({borderColor: "yellow"}, iniciar);
+
     }
+
+
+	/*Efecto rebote al presionar el boton reiniciar*/
+	$(function(){
+		$(".btn-reinicio").on("click", function(){
+			$(".score").effect("shake",1000);
+			$(".moves").effect("shake",1000);
+			$(".time").effect("shake",1000);
+		  })
+		})
 
 
 /*Generacion de datos aleatorios*/
@@ -172,7 +201,7 @@ function deleteHorizontal(candyPosition, candyRow) {
 	}
 }
 
-/*Contador de Puntucion*/
+/*Contador de Puntuacion*/
 function setScore(candyCount) {
 	var puntuacion = Number($('#score-text').text());
 	switch (candyCount) {
@@ -194,7 +223,7 @@ function setScore(candyCount) {
 	$('#score-text').text(puntuacion);
 }
 
-//pone los elemento caramelo en el tablero
+/*carga de elementos */
 function checkBoard() {
 	fillBoard();
 }
@@ -219,19 +248,18 @@ function fillBoard() {
 	setValidations();
 }
 
-// Si hay dulces que borrar
+/*validacion de dulces a borrar*/
 function setValidations() {
 	columnValidation();
 	rowValidation();
-	// Si hay dulces que borrar
 	if ($('img.delete').length !== 0) {
 		deletesCandyAnimation();
 	}
 }
 
 
-//punto 7. interacción del usuario con el elemento caramelo es drag and drop
-//efecto de movimiento entre los caramelos
+/*paso 7 La interacción del usuario con el elemento dulce debe 
+ser de drag & drop*/
 function addCandyEvents() {
 	$('img').draggable({
 		containment: '.panel-tablero',
@@ -258,7 +286,7 @@ function enableCandyEvents() {
 	$('img').droppable('enable');
 }
 
-//hace que el caramelo sea solido al moverse
+/*Efecto de dulces al moverse*/
 function constrainCandyMovement(event, candyDrag) {
 	candyDrag.position.top = Math.min(100, candyDrag.position.top);
 	candyDrag.position.bottom = Math.min(100, candyDrag.position.bottom);
@@ -266,7 +294,7 @@ function constrainCandyMovement(event, candyDrag) {
 	candyDrag.position.right = Math.min(100, candyDrag.position.right);
 }
 
-//reemplaza a los caramelos anteriores
+/*reemplazo de dulces al moverse*/ 
 function swapCandy(event, candyDrag) {
 	var candyDrag = $(candyDrag.draggable);
 	var dragSrc = candyDrag.attr('src');
@@ -292,14 +320,14 @@ function checkBoardPromise(result) {
 	}
 }
 
-//valida la puntuacion por cantidad de elementos en linea
+/*Validacion de puntuacion*/
 function updateMoves() {
 	var actualValue = Number($('#movimientos-text').text());
 	var result = actualValue += 1;
 	$('#movimientos-text').text(result);
 }
 
-//eliminacion automatica de los elementos
+/*Eliminacion de elementos*/
 function deletesCandyAnimation() {
 	disableCandyEvents();
 	$('img.delete').effect('pulsate', 400);
@@ -321,7 +349,7 @@ function deletesCandyAnimation() {
 		});
 }
 
-//llenado automatico de los espacios con elementos 
+
 function showPromiseError(error) {
 	console.log(error);
 }
@@ -336,9 +364,7 @@ function deletesCandy() {
 	})
 }
 
-//punto 4 y 6. temporizador y boton reiniciar
-//cambia el aspecto de la página
-//final del juego
+/*paso 4 Temporizador del Juego*/
 function endGame() {
 	$('div.panel-tablero, div.time').effect('fold');
 	$('h1.main-titulo').addClass('title-over')
@@ -363,5 +389,3 @@ function initGame() {
 $(function() {
 	initGame();
 });
-
-
